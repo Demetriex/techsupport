@@ -1,1 +1,2 @@
-*.rb linguist-language=Python
+project/static/* linguist-vendored
+project/templates/*.html linguist-detectable=false
