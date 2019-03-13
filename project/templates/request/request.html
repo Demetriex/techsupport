@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}New Complain{% endblock %}
+{% block content %}
+<div class="container">
+  <div align="center">
+    <h1>Create New Request</h1>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-sm">
+    </div>
+    <div class="col-lg-8">
+      <form method="POST" action = "" enctype="multipart/form-data">
+        {% from "includes/_macros.html" import render_field %}
+        {{ form.hidden_tag() }}
+        <div class="row">
+          <div class="col-lg">
+            <div class="form-group">
+              {{ render_field(form.title,class='form-control') }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.description,class='form-control') }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.location,class='form-control') }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.department,class='form-control') }}
+            </div>
+          </div>
+          <div class="col-lg">
+            <div class="form-group">
+              {{ render_field(form.local_number,class='form-control') }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.other_contact,class='form-control') }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.file,class='form-control') }}
+            </div>
+            <br>
+            {{form.submit(class='btn btn-primary')}}
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="col-sm">
+    </div>
+  </div>
+</div>
+<br>
+{% endblock %}

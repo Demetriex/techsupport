@@ -1,0 +1,46 @@
+###############################################################################
+
+Requires:
+-Anaconda Python
+  -always check the add to path
+-Atom(Optional)
+  -install packages (platformio-ide-terminal,Python Autocomplete)
+
+###############################################################################
+
+in project/config.py
+the code must contain this
+  import os
+  basedir = os.path.abspath(os.path.dirname(__file__))
+  SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+
+################################################################################
+To run:
+install required libraries first
+Open cmd
+must be in directory of X:\pathtotechsupport\ceutechsupport>
+  -eg C:\Users\MyUser\Desktop\ceutechsupport>
+type in
+    pip install -r requirements.txt
+then
+    python app.py
+open in browser http://127.0.0.1:5000/
+
+########################FLASK MIGRATE##########################################
+for updating database models
+to generate migrations folder
+  flask db init
+then
+  flask db migrate
+to apply migrations
+  flask db upgrade
+
+###############################################################################
+default accounts
+admin
+email = admin@admin.com
+password = mysecretpassword
+
+super Admin
+email = super@admin.com
+password = superpassword

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/star.css">
+{% endblock %}
+{% block title %}View request {{request.id}}{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="jumbotron bg-white">
+		{% if feedback != None %}
+		{% if feedback.rating != None %}
+		{% set number = feedback.rating | int %}
+		<div align="center">
+			<p>Rating: {% for each in range(number) %}
+				<i class="active fa fa-star" aria-hidden="true" style="color:#FCD116;">
+				</i>{% endfor %}</p>
+		{% endif %}
+			<p>Feedback: {{feedback.feedback}}</p>
+		</div>
+		<br>
+		{% endif %}
+  <div class="row">
+    <div class="col-sm">
+						<p><span class="h6">Problem: </span>{{request.title}}</p>
+						<p><span class="h6">Problem Description/Observations: </span>{{request.description}}</p>
+						<p><span class="h6">Status: </span>{{request.status}}</p>
+						<p><span class="h6">Owner Name: </span><a href="{{url_for('common.user_page',email=owner.email)}}">{{owner.firstname}} {{owner.lastname}}</a></p>
+						<p><span class="h6">Date Submitted: </span>{{request.date_requested.strftime('%B %d, %Y')}}</p>
+						<p><span class="h6">Attached File: {% if request.file_attached %}
+						</span><a href="{{url_for('requests.file_download',filename=request.file_attached)}}" download>{{request.file_attached}}</a>
+							{% else %}
+							 No file
+							{% endif %}
+						</p>
+						{% if request.recommendation %}
+						<p><span class="h6">Recommendation: </span>{{request.recommendation}}</p>
+						{% endif %}
+						{% if request.recommended_by %}
+						<p><span class="h6">Recommended by: </span>
+							<a href="{{url_for('common.user_page',email=request.recommended_by)}}" target="_blank">{{recommended_user.firstname}} {{recommended_user.lastname}}</a></p>
+						{% endif %}
+		</div>
+    <div class="col-sm">
+			<p><span class="h6">Department: </span>{{request.department}}</p>
+			<p><span class="h6">Local Number: </span>{{request.local_number}}</p>
+			<p><span class="h6">Location: </span>{{request.location}}</p>
+			<p><span class="h6">Other Contact: </span>{{request.other_contact}}</p>
+			<p><span class="h6">Assigned to: </span>{% if request.assigned_to != None %}
+				<a href="{{url_for('common.user_page',email=request.assigned_to)}}" target="_blank">{{assign_user.firstname}} {{assign_user.lastname}}</a>
+				{% else %}None{% endif %}</p>
+				{% if request.action_taken %}
+				<p><span class="h6">Action Taken: </span>{{request.action_taken}}</p>
+				{% endif %}
+		</div>
+		<div class="col-sm">
+					{% from "includes/_macros.html" import render_field %}
+					{% if current_user.has_role('tech-support') and request.action_taken != None and request.recomendation == None %}
+					<form method="POST" action="">
+						{{rec_form.hidden_tag()}}
+						<div class="form-group">
+							{{ render_field(rec_form.recommendation,class='form-control') }}
+						</div>
+						{{rec_form.submit(class='btn btn-primary')}}
+					</form>
+					<br>
+					{% elif current_user.has_role('tech-support') and request.action_taken == None %}
+					<form method="POST" action="">
+						{% from "includes/_macros.html" import render_field %}
+						{{rec_form.hidden_tag()}}
+						<div class="form-group">
+							{{ render_field(act_form.action,class='form-control') }}
+						</div>
+						{{act_form.submit(class='btn btn-primary')}}
+					</form>
+					<br>
+					{% endif %}
+					{% if current_user.has_role('admin') or current_user.has_role('super-admin') %}
+					<div>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Re-Assign</button>
+					</div>
+					<br>
+					{% endif %}
+					{% if request.owner_id == current_user.id and feedback == None and request.assigned_to != None and request.action_taken %}
+					<form action="{{url_for('requests.feedback',requestid=request.id,ownerid=request.owner_id,technician=request.assigned_to)}}" method="POST">
+						<div align="center">
+							<div class="star-rating">
+										<input id="star-5" type="radio" name="rating" value="5">
+										<label for="star-5" title="5 stars">
+												<i class="active fa fa-star" aria-hidden="true"></i>
+										</label>
+										<input id="star-4" type="radio" name="rating" value="4">
+										<label for="star-4" title="4 stars">
+												<i class="active fa fa-star" aria-hidden="true"></i>
+										</label>
+										<input id="star-3" type="radio" name="rating" value="3">
+										<label for="star-3" title="3 stars">
+												<i class="active fa fa-star" aria-hidden="true"></i>
+										</label>
+										<input id="star-2" type="radio" name="rating" value="2">
+										<label for="star-2" title="2 stars">
+												<i class="active fa fa-star" aria-hidden="true"></i>
+										</label>
+										<input id="star-1" type="radio" name="rating" value="1">
+										<label for="star-1" title="1 star">
+												<i class="active fa fa-star" aria-hidden="true"></i>
+										</label>
+										<p><small>Rate the technician</small></p>
+									</div>
+						</div>
+								<textarea name="text-feedback" class="form-control" id="text-feedback" placeholder="Write your feedback here..." required></textarea>
+								<br>
+								<input class="btn btn-customdarkviolet" type="submit" value="Submit Feedback and Rating" >
+					</form>
+					{% endif %}
+		</div>
+		</div>
+    </div>
+</div>
+<br>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Assign request</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="POST">
+      <div class="modal-body">
+        {{ form.hidden_tag() }}
+        {{form.technician.label}} {{ form.technician(class="form-control") }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        {{form.submit(class="btn btn-primary")}}
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

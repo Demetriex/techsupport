@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Create User{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+      <form  method="POST" action = "">
+        {% from "includes/_macros.html" import render_field %}
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ render_field(form.email,class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ render_field(form.firstname,class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ render_field(form.lastname,class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ render_field(form.role,class='form-control') }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+      </form>
+
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+<br>
+
+{% endblock content %}

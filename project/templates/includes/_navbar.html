@@ -1,0 +1,117 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-1">
+      <br><img src="/static/images/centro.png">
+    </div>
+    <div class="col-sm-auto">
+      <br>
+      <br><h1 style="color:maroon;">CEU ICT TechSupport</h1>
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  {% set index = 'index' %}
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav nav">
+      <li class="nav-item {% if index == active_page %}active{% endif %}">
+        <a class="nav-link" href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      {% if current_user.is_authenticated %}
+      {% if not current_user.has_role('tech-support') and not current_user.has_role('admin')
+      and not current_user.has_role('super-admin') %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Maintenance Request
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{url_for('requests.request_ticket')}}">Create Request</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{url_for('common.user_tickets')}}">Request Summary</a>
+          <a class="dropdown-item" href="{{url_for('search.track')}}">Track Request</a>
+      </li>
+      {% endif %}
+      {% endif %}
+
+      {% if current_user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account Maintenance
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{url_for('common.user_page',email=current_user.email)}}">My Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{url_for('common.profile')}}">Edit Profile</a>
+          <a class="dropdown-item" href="{{url_for('common.update_password')}}">Update Password</a>
+        </div>
+      </li>
+      {% endif %}
+      {% if current_user.has_role('tech-support') %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Maintenance Request
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{url_for('requests.assigned_tickets')}}">Assigned Request</a>
+          <a class="dropdown-item" href="{{url_for('requests.all_tickets')}}">Request Summary</a>
+      </li>
+      {% endif %}
+      {% if current_user.has_role('admin') or current_user.has_role('super-admin')%}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Manage Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{url_for('manage.create_account')}}">Create Account</a>
+          <div class="dropdown-divider"></div>
+          {% if current_user.has_role('super-admin') %}
+          <a class="dropdown-item" href="{{url_for('manage.admin_account')}}">Admin Accounts</a>
+          {% endif %}
+          <a class="dropdown-item" href="{{url_for('manage.technician_account')}}">Technician Accounts</a>
+          <a class="dropdown-item" href="{{url_for('manage.end_user_account')}}">End-User Accounts</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Maintenance Request
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          {% if current_user.has_role('super-admin') %}
+          <a class="dropdown-item" href="{{url_for('requests.request_ticket')}}">Create Request</a>
+          {% endif %}
+          <a class="dropdown-item" href="{{url_for('requests.all_tickets')}}">Request Summary</a>
+          <a class="dropdown-item" href="{{url_for('requests.pending_tickets')}}">Assigned Request</a>
+          <a class="dropdown-item" href="{{url_for('search.track')}}">Track Request</a>
+        </div>
+      </li>
+      {% if current_user.has_role('super-admin') %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('admin.index')}}">Database</a>
+      </li>
+
+      {% endif %}
+      </ul>
+      {% endif %}
+      <ul class="nav navbar-nav mr-auto"></ul>
+
+      <ul class="nav navbar-nav">
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('security.logout')}}">Log Out</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('security.login')}}">Log In</a>
+        </li>
+        {% endif %}
+      </ul>
+
+  </div>
+</nav>
+</div>
+<br>

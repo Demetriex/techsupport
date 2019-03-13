@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="/static/datatable/datatables.css">
+<script src="/static/datatable/datatables.js"></script>
+{% endblock %}
+{% block title %}Add Department{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col"></div>
+  <div class="col">
+    <div class="container">
+      <form  method="POST" action = "{{url_for('administrator.add_department')}}" enctype="multipart/form-data">
+        {% from "includes/_macros.html" import render_field %}
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ render_field(form.department,class='form-control') }}
+        </div>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-primary") }}
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col"></div>
+</div>
+<br>
+<div class="container">
+  <script>
+  $(document).ready( function () {
+  $('#mytable').DataTable();
+  } );
+  </script>
+  <h3 align="center">List of Departments</h3>
+  <table id="mytable" class="display">
+    <thead>
+      <tr>
+        <th>Department</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for department in items %}
+      <tr>
+        <td>{{ department.name }}</td>
+        <form action="{{url_for('administrator.delete_department',id=department.id)}}" method="post">
+          <td><button type="submit" class="btn btn-danger">Delete</button></td>
+        </form>
+        </tr>
+      {% endfor %}
+
+
+
+    </tbody>
+  </table>
+</div>
+<br>
+{% endblock %}

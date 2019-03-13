@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Page for {{account.firstname}} {{account.lastname}}{% endblock %}
+{% block content %}
+<div class="container">
+  <br>
+  <div class="row">
+    <div class="col">
+      <div class="container">
+          <div align="center">
+            <img src="{{ url_for('static', filename='profile_pics/' + account.profile_image) }}" style="border: 5px solid gray;">
+            <br><br>
+            {% if account.has_role('super-admin') %}
+            <span class="badge badge-pill badge-customgreen">Super-Admin</span>
+            {% elif account.has_role('admin') %}
+            <span class="badge badge-pill badge-primary">Admin</span>
+            {% elif account.has_role('tech-support') %}
+            <span class="badge badge-pill badge-success">Tech-Support</span>
+            {% else %}
+            <span class="badge badge-pill badge-customdarkviolet">End-User</span>
+            {% endif %}
+          </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="container">
+        <h6>{{account.firstname}} {{account.lastname}}</h6>
+        <p>Email: {{account.email}}</p>
+        {% if (current_user.has_role('admin') or current_user.has_role('super-admin')) and current_user.id!=account.id %}
+        <form action="{{url_for('manage.update_account',id = account.id)}}">
+          <input class="btn btn-primary" type="submit" value="Update" />
+        </form>
+        {% endif %}
+      </div>
+
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="/static/datatable/datatables.css">
+<script src="/static/datatable/datatables.js"></script>
+{% endblock %}
+{% block title %}Available Tickets{% endblock %}
+{% block content %}
+
+<div class="container">
+  <script>
+  $(document).ready( function () {
+  $('#open').DataTable();
+  } );
+  </script>
+  <h3 align="center">Activate</h3>
+  <table id="open" class="display">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Activate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{user.firstname}} {{user.lastname}}</td>
+        <td>{{user.email}}</td>
+        <form action="{{url_for('administrator.activate_user',email=user.email)}}" method="post">
+          <td><button type="submit" class="btn btn-primary">Activate User</button></td>
+        </form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<br>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Track Request{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col">
+      <form action="{{ url_for('search.track') }}" method="POST">
+      <input class="form-control" type="search" name="searchfield" placeholder="Enter Track Code" aria-label="Search">
+      <br>
+      <div align="center">
+        <button class="btn btn-success " type="submit">Search</button>
+      </div>
+      </form>
+    </div>
+    <div class="col"></div>
+  </div>
+  <br>
+  {% if report != None %}
+  <div class="jumbotron bg-white">
+    <div>
+      <h1>Status: </span>{{report.status}}</h1>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-1">
+      </div>
+        <div class="col-lg">
+          <div class="container">
+                <p><span class="h6">Problem: </span>{{report.title}}</p>
+                <p><span class="h6">Problem Description/Observations: </span>{{report.description}}</p>
+                <p><span class="h6">Owner Name: </span><a href="{{url_for('common.user_page',email=owner.email)}}">{{owner.firstname}} {{owner.lastname}}</a></p>
+                <p><span class="h6">Date Submitted: </span>{{report.date_requested.strftime('%B %d, %Y')}}</p>
+                <p><span class="h6">Attached File: {% if request.file_attached %}
+                </span><a href="{{url_for('request.file_download',filename=report.file_attached)}}" download>{{request.file_attached}}</a>
+                  {% else %}
+                   No file
+                  {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="col-lg">
+          <div class="container">
+            <p><span class="h6">Department: </span>{{report.department}}</p>
+            <p><span class="h6">Local Number: </span>{{report.local_number}}</p>
+            <p><span class="h6">Location: </span>{{report.location}}</p>
+            <p><span class="h6">Other Contact: </span>{{report.other_contact}}</p>
+            <p><span class="h6">Assigned to: </span>{% if report.assigned_to != None %}
+              <a href="{{url_for('common.user_page',email=report.assigned_to)}}" target="_blank">{{report.assigned_name}}</a>
+              {% else %}None{% endif %}</p>
+              {% if report.action_taken %}
+              <p><span class="h6">Action Taken: </span>{{report.action_taken}}</p>
+              {% endif %}
+          </div>
+        </div>
+        <div class="col-1">
+        </div>
+    </div>
+  </div>
+  {% elif msg == 'hello' %}
+  <div align="center">
+    <h1>Please enter your tracking code</h1>
+  </div>
+  {% else %}
+  <div align="center">
+    <h1>No Record Found</h1>
+  </div>
+
+  {% endif %}
+</div>
+{% endblock %}

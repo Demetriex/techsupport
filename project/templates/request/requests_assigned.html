@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="/static/datatable/datatables.css">
+<script src="/static/datatable/datatables.js"></script>
+{% endblock %}
+{% block title %}Request Assigned to {{current_user.firstname}} {{current_user.lastname}}{% endblock %}
+{% block content %}
+
+<div class="container">
+  <script>
+  $(document).ready( function () {
+  $('#open').DataTable({
+    "aaSorting": []
+  }
+  );
+  } );
+  </script>
+  <table id="open" class="display">
+    <thead>
+      <tr>
+        <th>Date Submitted</th>
+        <th>Status</th>
+        <th>Track Code</th>
+        <th>Owner of ticket</th>
+        <th>Problem</th>
+        <th>Department</th>
+        <th>More Info</th>
+      </tr>
+    </thead>
+    <h3 align="center">Request Assigned to {{current_user.firstname}} {{current_user.lastname}}</h3>
+    <tbody>
+      {% for ticket,user in tickets %}
+      <tr>
+        <td>{{ticket.date_requested.strftime('%B %d, %Y, %I:%M %p')}}</td>
+        <td>{{ticket.status}}</td>
+        <th>{{ticket.track_code}}</th>
+        <td><a href="{{url_for('common.user_page',email=user.email)}}" target="_blank">{{user.firstname}} {{user.lastname}}</a></td>
+        <td>{{ticket.title}}</td>
+        <td>{{ticket.department}}</td>
+        <td><a href="{{url_for('requests.tickets_view',ownerid=ticket.owner_id,ticketno=ticket.id,status='on-going')}}">Details</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<br>
+{% endblock %}

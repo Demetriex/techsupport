@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="/static/datatable/datatables.css">
+<script src="/static/datatable/datatables.js"></script>
+{% endblock %}
+{% block title %}Technician Accounts{% endblock %}
+{% block content %}
+<script>
+$(document).ready( function () {
+$('#active').DataTable();
+} );
+$(document).ready( function () {
+$('#inactive').DataTable();
+} );
+</script>
+<div class="container">
+  <div align="center">
+    <h1>Technician Accounts</h1>
+  </div>
+<div class="row">
+  <div class="col">
+    <table id="active" class="display">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <h3 align="center">Active User</h3>
+      <tbody>
+        {% for user in user_active %}
+        <tr>
+          <td>{{user.firstname}} {{user.lastname}}</td>
+          <td>
+            <form action="{{url_for('manage.update_account',id = user.id)}}">
+              <input class="btn btn-primary" type="submit" value="Update" />
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+  <div class="col">
+    <table id="inactive" class="display">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <h3 align="center">Inactive Users</h3>
+      <tbody>
+        {% for user in user_inactive %}
+        <tr>
+          <td>{{user.firstname}} {{user.lastname}}</td>
+          <td>
+            <form action="{{url_for('manage.update_account',id = user.id)}}">
+              <input class="btn btn-primary" type="submit" value="Update" />
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>
+</div>
+
+{% endblock %}

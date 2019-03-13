@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}404 Error{% endblock %}
+{% block content %}
+
+<div align="center">
+  <h1>You don't have access to this page</h1>
+  <a href="{{url_for('index')}}">Return to the main page</a>
+  <br><br>
+  <img src="/static/images/notpass.png" height="300" width="400">
+</div>
+
+{% endblock %}

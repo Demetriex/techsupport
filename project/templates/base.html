@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="/static/images/centro.png" />
+    <!-- stylesheets here-->
+    {% include "includes/_scripts.html" %}
+    {% include "includes/_stylesheet.html" %}
+    {% block links %}{% endblock %}
+    <title>{% block  title %}{% endblock %}</title>
+  </head>
+  <style>
+  body {
+  	background-color: #FED3E7;
+  	background-size: 100%;
+  }
+  {% block style %}
+  {% endblock %}
+  </style>
+  <body>
+
+    {% include "includes/_navbar.html" %}
+    <div class="container">
+      {% include "includes/_messages.html" %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
+    <!-- scripts here-->
+    {% include "includes/_footer.html"%}
+  </body>
+</html>
