@@ -1,2 +1,1 @@
-project/static/* linguist-vendored
-project/templates/* linguist-vendored
+project/*linguist-vendored
